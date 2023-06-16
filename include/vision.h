@@ -1,20 +1,15 @@
-#ifndef KINOVA_VISION_H
-#define KINOVA_VISION_H
+#ifndef KINOVA_VISION_HPP
+#define KINOVA_VISION_HPP
 
-extern "C" {
 #include <gst/gst.h>
 #include <gst/app/gstappsink.h>
-}
 
-#include <ros/ros.h>
-
-#include <image_transport/image_transport.h>
-#include <camera_info_manager/camera_info_manager.h>
-
-#include <sensor_msgs/Image.h>
-#include <sensor_msgs/image_encodings.h>
-#include <sensor_msgs/CameraInfo.h>
-#include <sensor_msgs/SetCameraInfo.h>
+#include <rclcpp/rclcpp.hpp>
+#include <sensor_msgs/msg/image.hpp>
+#include <sensor_msgs/msg/camera_info.hpp>
+#include <sensor_msgs/srv/set_camera_info.hpp>
+#include <image_transport/image_transport.hpp>
+#include <camera_info_manager/camera_info_manager.hpp>
 
 namespace CameraTypes
 {
@@ -26,10 +21,10 @@ enum CameraType
 };
 }
 
-class Vision
+class Vision : public rclcpp::Node
 {
 public:
-  Vision(ros::NodeHandle nh_camera, ros::NodeHandle nh_private);
+  explicit Vision(const rclcpp::NodeOptions &options);
   ~Vision();
 
   void run();
@@ -46,17 +41,14 @@ private:
 
 private:
   // ROS elements
-  ros::NodeHandle nh_;
-  ros::NodeHandle nh_private_;
   camera_info_manager::CameraInfoManager camera_info_manager_;
   image_transport::CameraPublisher camera_publisher_;
-  image_transport::ImageTransport image_transport_;
 
   // Gstreamer elements
   GstElement* gst_pipeline_;
   GstElement* gst_sink_;
 
-  // General gstreamer configuration
+  // General Gstreamer configuration
   std::string camera_config_;
   std::string camera_name_;
   std::string camera_info_;
@@ -74,7 +66,6 @@ private:
   int image_height_;
   int pixel_size_;
   bool use_gst_timestamps_;
-  bool is_first_initialize_;
 };
 
 #endif

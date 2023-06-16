@@ -1,33 +1,25 @@
-
 #include "vision.h"
 
-#include <ros/ros.h>
-#include <signal.h>
+#include <rclcpp/rclcpp.hpp>
+#include <csignal>
 
-Vision* g_vision = NULL;
+std::shared_ptr<Vision> g_vision;
 
 void sigintHandler(int signal)
 {
-  if (g_vision)
-  {
-    g_vision->quit();
-  }
-
-  ros::shutdown();
+  rclcpp::shutdown();
 }
 
 int main(int argc, char** argv)
 {
-  ros::init(argc, argv, "kinova_vision", ros::init_options::NoSigintHandler);
-  ros::NodeHandle nh, nh_private("~");
+  rclcpp::init(argc, argv);
 
-  // Override the default ros sigint handler.
-  signal(SIGINT, sigintHandler);
+  // Override the default ROS sigint handler.
+  std::signal(SIGINT, sigintHandler);
 
-  g_vision = new Vision(nh, nh_private);
+  auto options = rclcpp::NodeOptions().use_intra_process_comms(true);
+  g_vision = std::make_shared<Vision>(options);
   g_vision->run();
-
-  delete g_vision;
 
   return 0;
 }
