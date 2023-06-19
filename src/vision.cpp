@@ -521,6 +521,7 @@ void Vision::run()
         stop();
       }
     }
+    rclcpp::spin_some(this->get_node_base_interface());
   }
 
   stop();
