@@ -61,7 +61,7 @@ install(
 
 install(
   DIRECTORY launch
-  DESTINATION share/${PROJECT_NAME}/launch
+  DESTINATION share/${PROJECT_NAME}
   FILES_MATCHING PATTERN "*.py"
 )
 
