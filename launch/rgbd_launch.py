@@ -6,7 +6,7 @@ from launch.actions import DeclareLaunchArgument, OpaqueFunction
 import yaml
 
 configurable_parameters = [
-    {"name": "device", "default": "192.168.1.10"},
+    {"name": "device", "default": "192.168.50.9"},
     {"name": "respawn", "default": "false"},
     {"name": "num_worker_threads", "default": "4"},
     {"name": "camera", "default": "camera"},
@@ -82,6 +82,7 @@ def launch_setup(context, *args, **kwargs):
         executable="static_transform_publisher",
         output="screen",
         arguments=["-0.0195", "-0.005", "0", "0", "0", "0", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("depth_frame_id").perform(context)],
+        # arguments=["-0.012", "-0.004", "0.0032", "0", "0", "0", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("depth_frame_id").perform(context)],
     )
     
     camera_color_tf_publisher = launch_ros.actions.Node(
