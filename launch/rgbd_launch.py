@@ -10,7 +10,7 @@ configurable_parameters = [
     {"name": "respawn", "default": "false"},
     {"name": "num_worker_threads", "default": "4"},
     {"name": "camera", "default": "camera"},
-    {"name": "camera_link_frame_id", "default": "camera_link"},
+    {"name": "camera_link_frame_id", "default": "end_effector_link"},
     {"name": "color_frame_id", "default": "camera_color_frame"},
     {"name": "depth_frame_id", "default": "camera_depth_frame"},
     {"name": "color_camera_info_url", "default": ""},
@@ -81,7 +81,8 @@ def launch_setup(context, *args, **kwargs):
         package="tf2_ros",
         executable="static_transform_publisher",
         output="screen",
-        arguments=["-0.0195", "-0.005", "0", "0", "0", "0", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("depth_frame_id").perform(context)],
+        arguments=["0.0275", "0.066", "-0.00305", "0.5626401", "0.5626401", "0", "-6056999", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("depth_frame_id").perform(context)],
+        #arguments=["-0.0195", "-0.005", "0", "0", "0", "0", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("depth_frame_id").perform(context)],
         # arguments=["-0.012", "-0.004", "0.0032", "0", "0", "0", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("depth_frame_id").perform(context)],
     )
     
@@ -89,7 +90,8 @@ def launch_setup(context, *args, **kwargs):
         package="tf2_ros",
         executable="static_transform_publisher",
         output="screen",
-        arguments=["0", "0", "0", "0", "0", "0", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("color_frame_id").perform(context)],
+        arguments=["0.0", "0.05639", "-0.00305", "0.5626401", "0.5626401", "0", "-6056999", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("color_frame_id").perform(context)],
+        # arguments=["0", "0", "0", "0", "0", "0", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("color_frame_id").perform(context)],
     )
     
     return [depth_node, color_node, camera_depth_tf_publisher, camera_color_tf_publisher]
