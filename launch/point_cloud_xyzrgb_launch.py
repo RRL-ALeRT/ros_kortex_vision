@@ -26,17 +26,17 @@ def generate_launch_description():
                     ("depth_registered/camera_info","/kinova_depth_registered/camera_info"),
                 ],
             ),
-            launch_ros.descriptions.ComposableNode(
-                package="depth_image_proc",
-                plugin="depth_image_proc::PointCloudXyzrgbNode",
-                name=("point_cloud_xyzrgb"),
-                remappings=[
-                    ("rgb/camera_info", "/kinova_color/camera_info"),
-                    ("rgb/image_rect_color", "/kinova_color"),
-                    ("depth_registered/image_rect","/kinova_depth_registered"),
-                    ("points", "/kinova_points"),
-                ],
-            ),
+            # launch_ros.descriptions.ComposableNode(
+            #     package="depth_image_proc",
+            #     plugin="depth_image_proc::PointCloudXyzrgbNode",
+            #     name=("point_cloud_xyzrgb"),
+            #     remappings=[
+            #         ("rgb/camera_info", "/kinova_color/camera_info"),
+            #         ("rgb/image_rect_color", "/kinova_color"),
+            #         ("depth_registered/image_rect","/kinova_depth_registered"),
+            #         ("points", "/kinova_points"),
+            #     ],
+            # ),
         ],
         output="screen",
     )

@@ -77,12 +77,34 @@ def launch_setup(context, *args, **kwargs):
         ],
     )
 
+    depth_image_proc = launch_ros.actions.ComposableNodeContainer(
+        name="container",
+        namespace="",
+        package="rclcpp_components",
+        executable="component_container",
+        output="screen",
+        composable_node_descriptions=[
+            launch_ros.descriptions.ComposableNode(
+                package="depth_image_proc",
+                plugin="depth_image_proc::RegisterNode",
+                name="register_node",
+                remappings=[
+                    ("depth/image_rect", "/kinova_depth"),
+                    ("depth/camera_info", "/kinova_depth/camera_info"),
+                    ("rgb/camera_info", "/kinova_color/camera_info"),
+                    ("depth_registered/image_rect","/kinova_depth_registered"),
+                    ("depth_registered/camera_info","/kinova_depth_registered/camera_info"),
+                ],
+            ),
+        ],
+    )
+
     camera_depth_tf_publisher = launch_ros.actions.Node(
         package="tf2_ros",
         executable="static_transform_publisher",
         output="screen",
-        arguments=["0.0275", "0.066", "-0.00305", "0.5626401", "0.5626401", "0", "-6056999", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("depth_frame_id").perform(context)],
-        #arguments=["-0.0195", "-0.005", "0", "0", "0", "0", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("depth_frame_id").perform(context)],
+        #arguments=["0.0275", "0.066", "-0.00305", "0.5626401", "0.5626401", "0", "-6056999", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("depth_frame_id").perform(context)],
+        arguments=["-0.0195", "-0.005", "0", "0", "0", "0", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("depth_frame_id").perform(context)],
         # arguments=["-0.012", "-0.004", "0.0032", "0", "0", "0", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("depth_frame_id").perform(context)],
     )
     
@@ -94,7 +116,7 @@ def launch_setup(context, *args, **kwargs):
         # arguments=["0", "0", "0", "0", "0", "0", LaunchConfiguration("camera_link_frame_id").perform(context), LaunchConfiguration("color_frame_id").perform(context)],
     )
     
-    return [depth_node, color_node, camera_depth_tf_publisher, camera_color_tf_publisher]
+    return [depth_node, color_node, camera_depth_tf_publisher, camera_color_tf_publisher, depth_image_proc]
 
 
 def generate_launch_description():
